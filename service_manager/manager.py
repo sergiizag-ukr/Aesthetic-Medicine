@@ -1,5 +1,5 @@
-from datetime import datetime
 from .models import Client
+from .decorators import log_action, validate_price
 from .db_models import (
     bd_add_client,
     bd_add_order,
@@ -14,13 +14,17 @@ from .db_models import (
     )
 
 
+
+
 class ServiceManager:
 
     def __init__(self):
         self.clients_ord = ""
         self.good = []
         self.revenue = 0
+    
 
+    @log_action
     def add_client(self):
         name = input("Input name of the client: ").strip()
         if name == "":
@@ -52,7 +56,8 @@ class ServiceManager:
 
         print(f"Client added. ID: {client_id}")
         return client_id
-
+    
+    @log_action
     def add_order(self):
 
         clients = get_all_clients()
@@ -79,19 +84,14 @@ class ServiceManager:
 
         print(f"Order created. ID: {order_id}")
     
-        
-
     def add_service(self):
-
         name = input("Input the name of service: ").strip()
-
         if name == "":
-            print("Please enter a service name: ")
+            print("Please enter a service name")
             return
 
         try:
             price = int(input("Input the price service: "))
-
         except ValueError as ve:
             print(f"Error: {ve}")
             return
@@ -102,14 +102,17 @@ class ServiceManager:
             print(f"Error: {ve}")
             return
 
+        self.create_service(name, price, duration)
+    
+    @log_action
+    @validate_price
+    def create_service(self, name, price, duration):
         service_id = bd_add_service(name, price, duration)
-        print(f"service added. ID: {service_id}")
-
-        return
-
+        print(f"Service added. ID: {service_id}")
+        return service_id
         
 
-
+    @log_action
     def show_orders(self):
         orders = get_orders_with_details()
 
@@ -122,7 +125,7 @@ class ServiceManager:
 
         return
     
-
+    @log_action
     def show_services(self):
         services = get_all_services()
 
@@ -133,7 +136,7 @@ class ServiceManager:
         for service in services:
             print(f"{service['id']}. {service['name']}. {service['duration']}. {service['price']}")
         return
-
+    @log_action
     def add_inventory(self):
 
         name = input("Input inventory name of the inventory: ")
@@ -156,6 +159,7 @@ class ServiceManager:
         inventory_id = add_inventory_item(name, quantity, price)
         print(f"Inventory added. ID: {inventory_id}")
         return
+
 
     def show_low_stock(self):
 
@@ -191,7 +195,7 @@ class ServiceManager:
     #         return self.revenue
 
 
-
+    @log_action
     def delete_order(self):
 
         orders = get_orders_with_details()
@@ -214,7 +218,7 @@ class ServiceManager:
 
        
 
-        
+    @log_action       
     def delete_service(self):
         services = get_all_services()
 

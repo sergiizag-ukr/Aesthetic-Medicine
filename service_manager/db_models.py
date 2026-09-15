@@ -1,5 +1,6 @@
 from database import get_connection
 from datetime import datetime
+from .decorators import validate_price
 
 def bd_add_client(name, phone, email):
     with get_connection() as conn:
@@ -18,6 +19,7 @@ def get_all_clients():
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM clients ORDER BY name")
         return cursor.fetchall()
+
 
 def bd_add_service(name, price, duration):
     with get_connection() as conn:
