@@ -1,10 +1,13 @@
-class Service():
+from dataclasses import dataclass
 
-    def __init__(self, client):
-        self.client = client
-        self.service = ""
-        self.date = ""
-        self.price = 1000
+@dataclass
+class Service:
+    name: str
+    price: float
+    duration_minutes: int
 
-    def __str__(self):
-        return f"{self.service} - {self.price}"
+    def price_per_hour(self):
+        return self.price / (self.duration_minutes / 60)
+
+    def formatted(self):
+        return f"{self.name} - {self.price} грн. {self.duration_minutes} хв."

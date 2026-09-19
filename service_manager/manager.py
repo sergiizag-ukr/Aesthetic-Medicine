@@ -26,6 +26,7 @@ class ServiceManager:
 
     @log_action
     def add_client(self):
+
         name = input("Input name of the client: ").strip()
         if name == "":
             print("Please enter a name")
@@ -36,21 +37,23 @@ class ServiceManager:
             print("Please enter a phone")
             return
 
-        client = Client(name)
-        
-        try:
-            client.phone = phone
-        except ValueError as ve:
-            print(f"Error: {ve}")
-            return
-
         email = input("Input email: ").strip()
+        if email == "":
+            print("Please enter an email")
+            return
 
+                
         try:
-            client.email = email
+            client = Client(
+                name = name,
+                phone = phone,
+                email = email
+                )
+
         except ValueError as ve:
             print(f"Error: {ve}")
             return
+       
 
         client_id = bd_add_client(client.name, client.phone, client.email)
 

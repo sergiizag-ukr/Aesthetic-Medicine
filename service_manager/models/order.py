@@ -1,4 +1,56 @@
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from .service import Service
+from .client import Client
+
+
+class OrderStatus(Enum):
+    CREATED = "Created"
+    IN_PROGRESS = "In Progress"
+    COMPLETED = "Completed"
+    CANCELLED = "Cancelled"
+
+@dataclass
+class Order:
+    client: Client
+    service: Service
+    status: OrderStatus = OrderStatus.CREATED
+    created_at: datetime = field(default_factory=datetime.now)
+    notes: str = ""
+
+    def total_price(self):
+        return self.service.price
+
+    def summary(self):
+        return f"{self.status.value} {self.client.name} - {self.service.name} - {self.service.price} грн. | {self.created_at.strftime('%Y-%m-%d %H:%M')} "
+
+    def is_active(self):
+        if self.status.value == "Created" or self.status.value == "In Progress":
+            return True
+
+        return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class Order(ABC):
