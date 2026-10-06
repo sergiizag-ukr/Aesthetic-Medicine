@@ -1,0 +1,33 @@
+ Table "public.clients"                                                    
+   Column   |            Type             | Collation | Nullable |               Default               
+------------+-----------------------------+-----------+----------+-------------------------------------
+ id         | integer                     |           | not null | nextval('clients_id_seq'::regclass)
+ name       | character varying(150)      |           | not null | 
+ phone      | character varying(20)       |           | not null | 
+ email      | character varying(100)      |           |          | 
+ notes      | text                        |           |          | 
+
+ aesthetic_medicine=# Потім по черзі:\d clients
+                                        Table "public.clients"                                                    
+   Column   |            Type             | Collation | Nullable |               Default               
+------------+-----------------------------+-----------+----------+-------------------------------------
+ id         | integer                     |           | not null | nextval('clients_id_seq'::regclass)
+ name       | character varying(150)      |           | not null | 
+ phone      | character varying(20)       |           | not null | 
+ email      | character varying(100)      |           |          | 
+ notes      | text                        |           |          | 
+ created_at | timestamp without time zone |           |          | now()   
+
+     TABLE "orders" CONSTRAINT "orders_client_id_fkey" FOREIGN KEY (client_id) REFERENCES clients(id)
+
+
+aesthetic_medicine-# \d inventories
+                                     Table "public.inventories"                                                   
+  Column  |          Type          | Collation | Nullable |                 Default                 
+----------+------------------------+-----------+----------+-----------------------------------------
+ id       | integer                |           | not null | nextval('inventories_id_seq'::regclass)
+ name     | character varying(150) |           | not null | 
+ quantity | integer                |           | not null | 
+ price    | numeric(10,2)          |           | not null | 
+Indexes:
+    "inventories_pkey" PRIMARY KEY, btree (id)
